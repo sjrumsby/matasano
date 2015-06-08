@@ -73,9 +73,14 @@ def acheivement_unlocked(cipher, char):
 
 cipher = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
 hex_vals = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"]
+success = 0
 
 for i in hex_vals:
 	for j in hex_vals:
 		if try_char(cipher, i+j):
-			acheivement_unlocked("ETAOIN SHRDLU".encode('hex'), i+j)
-
+			success += 1
+			
+if success == 1:
+	print "Pass! : )"
+else:
+	print "Fail. : ("
