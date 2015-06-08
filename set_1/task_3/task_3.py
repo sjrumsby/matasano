@@ -1,86 +1,93 @@
-f = open('dict.txt', 'r')
-word_list = [x.strip() for x in f.readlines()]
-f.close()
+import binascii
 
-def xor(val1, val2):
-        params = {
-                        "0" : "0000",
-                        "1" : "0001",
-                        "2" : "0010",
-                        "3" : "0011",
-                        "4" : "0100",
-                        "5" : "0101",
-                        "6" : "0110",
-                        "7" : "0111",
-                        "8" : "1000",
-                        "9" : "1001",
-                        "A" : "1010",
-                        "B" : "1011",
-                        "C" : "1100",
-                        "D" : "1101",
-                        "E" : "1110",
-			"F" : "1111",
-                        "a" : "1010",
-                        "b" : "1011",
-                        "c" : "1100",
-                        "d" : "1101",
-                        "e" : "1110",
-                        "f" : "1111",
-                }
-        rev_params = dict((v,k) for k,v in params.iteritems())
+def histogram_analysis(bits):
+        letter_freqs = {
+                        "a" : 8.167,
+                        "b" : 1.492,
+                        "c" : 2.782,
+                        "d" : 4.253,
+                        "e" : 12.702,
+                        "f" : 2.228,
+                        "g" : 2.015,
+                        "h" : 6.094,
+                        "i" : 6.966,
+                        "j" : 0.153,
+                        "k" : 0.772,
+                        "l" : 4.025,
+                        "m" : 2.406,
+                        "n" : 6.749,
+                        "o" : 7.507,
+                        "p" : 1.929,
+                        "q" : 0.095,
+                        "r" : 5.987,
+                        "s" : 6.327,
+                        "t" : 9.056,
+                        "u" : 2.758,
+                        "v" : 0.978,
+                        "v" : 0.978,
+                        "w" : 2.361,
+                        "x" : 0.150,
+                        "y" : 1.974,
+                        "z" : 0.074,
+                        " " : 15
+                        }
 
-        val1 = params[val1]
-        val2 = params[val2]
+        highest_score = 0
+        likely_letter = ''
+        for i in range(32,128):
+                score = 0
+		split_bits = [bits[x:x+8] for x in range(0, len(bits), 8)]
+                for j in split_bits:
+                        result = int(j,2) ^ int(bin(i)[2:].zfill(8),2)
+                        if result > 0 and result < 256:
+                                letter = chr(result).lower()
+                                try:
+                                        score += letter_freqs[letter]
+                                except:
+					score -= 2
+                        else:
+                                score -= 2
+                if score > highest_score:
+                        highest_score = score
+                        likely_letter = chr(i)
+        return likely_letter
 
-        rval = ""
-
-        for i in range(0,4):
-                if val1[i] == val2[i]:
-                        rval += "0"
-                else:
-                        rval += "1"
-        rval = rev_params[rval.zfill(4)]
-        return rval
-
-def try_char(cipher, char):
+def singleByteXOrDecrypt(cipher, enc):
 	result = ""
-	words = []
-	real_words = 0
+	split_bits = [cipher[x:x+8] for x in range(0, len(cipher), 8)]
+	for j in split_bits:
+		result += chr(int(j,2) ^ int(bin(ord('X'))[2:].zfill(8),2))
+	return result
 
-	for i in range(0,len(cipher), 2):
-		result += xor(cipher[i], char[0]) + xor(char[1], cipher[i+1])
-	try:
-		result = result.decode('hex').encode('ascii')
-		words = result.split(" ")
+hex_to_bin = {
+                "0" : "0000",
+                "1" : "0001",
+                "2" : "0010",
+                "3" : "0011",
+                "4" : "0100",
+                "5" : "0101",
+                "6" : "0110",
+                "7" : "0111",
+                "8" : "1000",
+                "9" : "1001",
+                "A" : "1010",
+                "B" : "1011",
+                "C" : "1100",
+                "D" : "1101",
+                "E" : "1110",
+                "a" : "1010",
+                "b" : "1011",
+                "c" : "1100",
+                "d" : "1101",
+                "e" : "1110",
+                "f" : "1111",
+             }
 
-		if len(words) > 1:
-			for x in words:
-				if x.lower() in word_list:
-					real_words += 1
-		if real_words > 1:
-			print char + " (" + char.decode('hex').encode('ascii')  + "): " + result
-			return 1
-			
-	except UnicodeDecodeError:
-		return 0
-	#print "Trying char %s" % char.decode('hex').encode('ascii')
-
-def acheivement_unlocked(cipher, char):
-	result = ""
-	for i in range(0,len(cipher), 2):
-		result += xor(cipher[i], char[0]) + xor(char[1], cipher[i+1])
-	print cipher.encode('ascii'), result
-
-cipher = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
-hex_vals = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"]
+cipher_bits = ''.join([hex_to_bin[x] for x in "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"])
 success = 0
 
-for i in hex_vals:
-	for j in hex_vals:
-		if try_char(cipher, i+j):
-			success += 1
-			
-if success == 1:
-	print "Pass! : )"
-else:
-	print "Fail. : ("
+letter = histogram_analysis(cipher_bits)
+plain_text = singleByteXOrDecrypt(cipher_bits, letter)
+
+print '(%s) %s' % (letter, plain_text)
+
