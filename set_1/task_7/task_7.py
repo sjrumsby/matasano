@@ -1,7 +1,7 @@
 import base64
 from Crypto.Cipher import AES
 
-key = b'YELLOW SUBMARINE'
+key = 'YELLOW SUBMARINE'
 
 f = open('7.txt')
 cipher_text = base64.b64decode(f.read()) 
