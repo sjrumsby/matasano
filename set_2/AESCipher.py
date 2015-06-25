@@ -26,9 +26,13 @@ class AESCipher():
 		return msg + (chr(missing)*missing)
 
 	def pkcs7chk(self, msg):
-		  padlen = ord(msg[-1])
-		  sl = len(msg)-1
-		  return msg[:sl-padlen+1]
+		padlen = ord(msg[-1])
+		sl = len(msg)-1
+		for x in msg[sl-padlen+1:]:
+			if ord(x) != padlen:
+				raise ValueError("Invalid PKCS#7 padding")		    
+
+		return msg[:sl-padlen+1]
 
 	def ecb_encrypt(self, msg):
 		a = AES.new(self.key, AES.MODE_ECB)
