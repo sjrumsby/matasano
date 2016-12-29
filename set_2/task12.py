@@ -24,6 +24,7 @@ key = generate_key()
 
 a = AESCipher(key)
 bs = determine_block_size(a)
+print "Block size: %s" % bs
 known_data = ""
 char_dict = {}
 

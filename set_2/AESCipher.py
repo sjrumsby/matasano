@@ -4,7 +4,7 @@ from random import randint
 
 class AESCipher():
 	def __init__(self, key=None, bs=16, iv=None):
-		self.bs = 16
+		self.bs = bs
 
 		if key is None:
 			self.key = self.generate_key(16)
@@ -20,6 +20,13 @@ class AESCipher():
 		for i in range(n):
 			key += chr(randint(32,255))
 		return key
+		
+	def pad_to_length(self, msg, pad_length):
+		if len(msg) > pad_length:
+			raise ValueError("Pad length (%s) must be greater than the message length (%s)" % (pad_length, len(msg)))
+			
+		missing = len(msg) - pad_length
+		return msg + chr(missing)*missing
 
 	def pkcs7pad(self, msg):
 		missing = abs(len(msg) - (len(msg)/self.bs+1) * self.bs)

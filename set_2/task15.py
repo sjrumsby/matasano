@@ -8,19 +8,19 @@ a = AESCipher()
 
 try:
 	a.pkcs7chk(msg1)
-	print "Success"
+	print "Success: No error was thrown"
 except ValueError:
-	print "Fail"
+	print "Fail: An error was thrown"
 
 try:
 	a.pkcs7chk(msg2)
-	print "Fail"
+	print "Fail: No error was thrown"
 except ValueError:
-	print "Success"
+	print "Success: An error was thrown"
 
 try:
 	a.pkcs7chk(msg3)
-	print "Fail"
+	print "Fail: No error was thrown"
 except ValueError:
-	print "Success"
+	print "Success: An error was thrown"
 
