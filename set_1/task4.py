@@ -49,7 +49,7 @@ def singleByteXOrDecrypt(cipher, enc):
                 result += chr(int(j,16) ^ int(bin(ord(str(enc)))[2:].zfill(8),2))
         return result
 
-f = open('strings.txt', 'r')
+f = open('task4_strings.txt', 'r')
 words = [x.strip() for x in f.readlines()]
 f.close()
 results = []

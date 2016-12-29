@@ -18,7 +18,7 @@ clear_texts = 	[
 
 cipher = "ICE"
 
-f = open('dict.txt', 'r')
+f = open('task5_dict.txt', 'r')
 words = [x.strip() for x in f.readlines()]
 f.close()
 

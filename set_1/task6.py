@@ -111,7 +111,7 @@ if hamming_distance(test_string1, test_string2) == 37:
 else:
 	exit()
 
-f = open('file.txt', 'r')
+f = open('task6_file.txt', 'r')
 enc_data = ''.join( x for x in [x.strip() for x in f.readlines()])
 f.close()
 

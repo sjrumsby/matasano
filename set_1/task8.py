@@ -1,4 +1,4 @@
-f = open('8.txt')
+f = open('task8_data.txt')
 strings = [x.strip() for x in f.readlines()]
 f.close()
 

@@ -3,7 +3,7 @@ from Crypto.Cipher import AES
 
 key = 'YELLOW SUBMARINE'
 
-f = open('7.txt')
+f = open('task7_data.txt')
 cipher_text = base64.b64decode(f.read()) 
 f.close()
 
